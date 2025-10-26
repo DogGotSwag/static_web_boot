@@ -13,7 +13,7 @@ class TextNode():
         self.text_type = TextType[text_type]
         self.url = url
 
-    def __eg__(self, other):
+    def __eq__(self, other):
         if self.text != other.text:
             return False
         if self.text_type != other.text_type:
