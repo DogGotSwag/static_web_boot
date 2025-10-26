@@ -10,7 +10,7 @@ class TextType(Enum):
 class TextNode():
     def __init__(self, text, text_type, url = None):
         self.text = text
-        self.text_type = text_type
+        self.text_type = TextType[text_type]
         self.url = url
 
     def __eg__(self, other):
@@ -23,4 +23,4 @@ class TextNode():
         return True
     
     def __repr__(self):
-        return f"TextNode({self.text, self.text_type, self.url})"
+        return f"TextNode({self.text, self.text_type.value[0], self.url})"
