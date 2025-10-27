@@ -4,3 +4,6 @@ class HTMLNode():
         self.value = value
         self.children = children
         self.props = props
+
+    def to_html(self):
+        raise NotImplementedError("Child classes will override this method")
