@@ -11,8 +11,8 @@ class HTMLNode():
     def props_to_html(self):
         string = ""
         for key in self.props:
-            string += f'{key}="{self.props[key]}" '
-        return string[0:-1]
+            string += f' {key}="{self.props[key]}"'
+        return string
     
 dis_dict = {
     "href": "https://www.google.com",
