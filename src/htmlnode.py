@@ -21,14 +21,4 @@ class HTMLNode():
         children: {self.children}
         props: {self.props}
         """
-        
-    
-dis_dict = {
-    "href": "https://www.google.com",
-    "target": "_blank",
-}
-
-
-test = HTMLNode("a", "hello fn", "h2", dis_dict)
-print(test)
 
