@@ -1,5 +1,7 @@
 import unittest
 from htmlnode import HTMLNode
+from textnode import TextNode, TextType
+from text_node_to_html_node import text_node_to_html_node
 
 test_props = {
     "href": "https://www.google.com",
@@ -18,3 +20,11 @@ class TestHTMLNode(unittest.TestCase):
     def test_value(self):
         test_node = HTMLNode("h6", "motto motto", "p", test_props)
         self.assertEqual(test_node.value, "motto motto")
+
+
+class TestTextNodeToHtmlNode(unittest.TestCase):
+    def test_text(self):
+        node = TextNode("This is a text node", TextType.TEXT)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, None)
+        self.assertEqual(html_node.value, "This is a text node")
