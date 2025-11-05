@@ -16,3 +16,21 @@ class TestParentNode(unittest.TestCase):
             parent_node.to_html(),
             "<div><span><b>grandchild</b></span></div>",
         )
+
+    def test_parent_node_inside(self):
+        child_node = LeafNode("span", "child")
+        nested_parent_node = ParentNode("div", [child_node])
+        parent_node = ParentNode("div", [child_node, nested_parent_node])
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span>child</span><div><span>child</span></div></div>"
+        )
+
+    def test_no_children(self):
+        parent_node = ParentNode("div", [])
+        self.assertEqual(parent_node.to_html(), "<div></div>")
+
+    def test_no_grandchildren(self):
+        nested_parent_node = ParentNode("div", [])
+        parent_node = ParentNode("div", [nested_parent_node])
+        self.assertEqual(parent_node.to_html(), "<div><div></div></div>")
