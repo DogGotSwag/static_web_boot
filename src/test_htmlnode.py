@@ -107,3 +107,21 @@ class TestTextNodeToHtmlNode(unittest.TestCase):
             html_node.props,
             {"src": "https://www.boot.dev", "alt": "This is an image"},
         )
+
+    def test_link(self):
+        node = TextNode("This a link fr", TextType.LINK, "https://www.boot.dev")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "a")
+        self.assertEqual(html_node.value, "This a link fr")
+        self.assertEqual(
+            html_node.props,
+            {"href": "https://www.boot.dev"},
+        )
+
+    def test_link_two(self):
+        node = TextNode("da void", TextType.LINK, "https://www.google.com")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(
+            html_node.to_html(),
+            '<a href="https://www.google.com">da void</a>'
+        )
