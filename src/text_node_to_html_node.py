@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType
-from leafnode import LeafNode
+from htmlnode import LeafNode
 
 def text_node_to_html_node(text_node):
     if text_node.text_type not in TextType:
