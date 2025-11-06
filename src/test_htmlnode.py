@@ -45,4 +45,4 @@ class TestTextNodeToHtmlNode(unittest.TestCase):
         node = TextNode("coding in c means ur good", TextType.ITALIC)
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "i")
-        self.assertEqual(html_node.to_html(), "<i>very italic text por favor</i>")
+        self.assertEqual(html_node.to_html(), "<i>coding in c means ur good</i>")
