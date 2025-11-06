@@ -93,13 +93,17 @@ class TestTextNodeToHtmlNode(unittest.TestCase):
         self.assertEqual(html_node.to_html(), "<b>big bold fr</b>")
 
     def test_italic(self):
-        node = TextNode("very italic text por favor", TextType.ITALIC)
-        html_node = text_node_to_html_node(node)
-        self.assertEqual(html_node.tag, "i")
-        self.assertEqual(html_node.to_html(), "<i>very italic text por favor</i>")
-
-    def test_italic(self):
         node = TextNode("coding in c means ur good", TextType.ITALIC)
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "i")
         self.assertEqual(html_node.to_html(), "<i>coding in c means ur good</i>")
+
+    def test_image(self):
+        node = TextNode("This is an image", TextType.IMAGE, "https://www.boot.dev")
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "img")
+        self.assertEqual(html_node.value, "")
+        self.assertEqual(
+            html_node.props,
+            {"src": "https://www.boot.dev", "alt": "This is an image"},
+        )
