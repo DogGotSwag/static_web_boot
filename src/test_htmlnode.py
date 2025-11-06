@@ -28,3 +28,21 @@ class TestTextNodeToHtmlNode(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, None)
         self.assertEqual(html_node.value, "This is a text node")
+
+    def test_bold(self):
+        node = TextNode("big bold fr", TextType.BOLD)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "b")
+        self.assertEqual(html_node.to_html(), "<b>big bold fr</b>")
+
+    def test_italic(self):
+        node = TextNode("very italic text por favor", TextType.ITALIC)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "i")
+        self.assertEqual(html_node.to_html(), "<i>very italic text por favor</i>")
+
+    def test_italic(self):
+        node = TextNode("coding in c means ur good", TextType.ITALIC)
+        html_node = text_node_to_html_node(node)
+        self.assertEqual(html_node.tag, "i")
+        self.assertEqual(html_node.to_html(), "<i>very italic text por favor</i>")
