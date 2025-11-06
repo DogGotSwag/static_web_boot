@@ -12,7 +12,7 @@ def text_node_to_html_node(text_node):
         case TextType.LINK:
             return LeafNode("a", text_node.text, {"href": ""})
         case TextType.IMAGE:
-            return LeafNode("i", text_node.text, {"src": "", "alt" : ""})
+            return LeafNode("img", "", {"src": text_node.url, "alt" : text_node.text})
         case _:
             raise Exception("wrong type")
 
