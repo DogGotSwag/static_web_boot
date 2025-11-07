@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -105,6 +105,31 @@ class TestSplitNodesDelimiter(unittest.TestCase):
                 TextNode("", TextType.TEXT),
             ]
         )
+        
+class TestExtractMarkdownImagesAndLinks(unittest.TestCase):
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    def test_extract_markdown_images_two(self):
+        matches = extract_markdown_images(
+            "![potato image](https://efr.farms.com/potato_pic.png) hhmm look a potato"
+        )
+        self.assertListEqual([("potato image", "https://efr.farms.com/potato_pic.png")], matches)
+
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "This is text with an [to boot dev](https://boot.dev)"
+        )
+        self.assertListEqual([("to boot dev", "https://boot.dev")], matches)
+
+    def test_extract_markdown_links_two(self):
+        matches = extract_markdown_links(
+            "[to google](https://google.com) this link takes u places"
+        )
+        self.assertListEqual([("to google", "https://google.com")], matches)
         
 
 
