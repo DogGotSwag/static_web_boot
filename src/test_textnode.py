@@ -125,11 +125,11 @@ class TestExtractMarkdownImagesAndLinks(unittest.TestCase):
         )
         self.assertListEqual([("to boot dev", "https://boot.dev")], matches)
 
-    def test_extract_markdown_links_two(self):
+    def test_extract_markdown_links_three(self):
         matches = extract_markdown_links(
-            "[to google](https://google.com) this link takes u places"
+            "![to google](https://img.com/poo) dis not a link "
         )
-        self.assertListEqual([("to google", "https://google.com")], matches)
+        self.assertListEqual([], matches)
         
 
 
