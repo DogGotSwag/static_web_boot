@@ -31,7 +31,7 @@ def split_nodes_image(old_nodes):
         links = extract_markdown_images(text)
         if len(links) == 0:
             if text != "":
-                all_nodes.append(TextNode(text, TextType.TEXT))
+                all_nodes.append(TextNode(text, node.text_type, node.url))
         else:
             sections = text.split(f"![{links[0][0]}]({links[0][1]})", 1)
             all_nodes.extend(split_nodes_image([TextNode(sections[0],TextType.TEXT)]))
@@ -46,10 +46,11 @@ def split_nodes_link(old_nodes):
         links = extract_markdown_links(text)
         if len(links) == 0:
             if text != "":
-                all_nodes.append(TextNode(text, TextType.TEXT))
+                all_nodes.append(TextNode(text, node.text_type, node.url))
         else:
             sections = text.split(f"[{links[0][0]}]({links[0][1]})", 1)
             all_nodes.extend(split_nodes_link([TextNode(sections[0],TextType.TEXT)]))
             all_nodes.append(TextNode(links[0][0], TextType.LINK, links[0][1]))
             all_nodes.extend(split_nodes_link([TextNode(sections[1],TextType.TEXT)]))
     return all_nodes
+
