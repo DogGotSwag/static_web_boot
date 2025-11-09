@@ -5,7 +5,8 @@ from inline_markdown import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_image,
-    split_nodes_link
+    split_nodes_link,
+    text_to_textnodes
 )
 
 class TestTextNode(unittest.TestCase):
@@ -176,8 +177,6 @@ class TestSplitNodesImageAndLINKS(unittest.TestCase):
         )
         nodes = split_nodes_link([node])
         new_nodes = split_nodes_image(nodes)
-
-
         self.assertListEqual(
             [
                 TextNode("free young melvin ", TextType.TEXT),
@@ -189,6 +188,43 @@ class TestSplitNodesImageAndLINKS(unittest.TestCase):
                 TextNode(" and another ", TextType.TEXT),
                 TextNode("second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"),
 
+            ],
+            new_nodes
+        )   
+
+
+class TestToTextNodes(unittest.TestCase):
+    def text_to_textnodes(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        new_nodes = text_to_textnodes(text)
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+            new_nodes
+        )   
+
+    def text_to_textnodes(self):
+        text = "**The boldest the boldest** but fr no lie _represent_ the world `print('hello world')` [link to the bank](https://bank.gov)"
+        new_nodes = text_to_textnodes(text)
+        self.assertListEqual(
+            [   
+                TextNode("The boldest the boldest", TextType.BOLD),
+                TextNode(" but fr no lie ", TextType.TEXT),
+                TextNode("represent", TextType.ITALIC),
+                TextNode(" the world ", TextType.TEXT),
+                TextNode("print('hello world')", TextType.CODE),
+                TextNode("  ", TextType.TEXT),
+                TextNode("link to bank", TextType.LINK, "https://bank.gov"),
             ],
             new_nodes
         )   
