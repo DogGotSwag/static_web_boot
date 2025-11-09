@@ -9,6 +9,8 @@ from inline_markdown import (
     text_to_textnodes
 )
 
+from block_markdown import markdown_to_blocks
+
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
         node = TextNode("This is a text node", TextType.BOLD)
@@ -229,7 +231,54 @@ class TestToTextNodes(unittest.TestCase):
             new_nodes
         )   
 
+class TestMarkDownToBlocks(unittest.TestCase):
+        def test_markdown_to_blocks(self):
+            md = """
+This is **bolded** paragraph
 
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+            blocks = markdown_to_blocks(md)
+            self.assertEqual(
+                blocks,
+                [
+                    "This is **bolded** paragraph",
+                    "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                    "- This is a list\n- with items",
+                ],
+            )
+
+        def test_markdown_to_blocks(self):
+            md = """
+
+
+
+
+        
+#right here would be a heading#
+##with a smaller header lol##
+
+sum plain text to keep it interesting
+_italians_ make the best pasta but dd makes the best `code` fr
+maybe the word is flat
+
+
+
+
+"""
+            blocks = markdown_to_blocks(md)
+            self.assertEqual(
+                blocks,
+                [
+                    "#right here would be a heading#\n##with a smaller header lol##",
+                    "sum plain text to keep it interesting\n_italians_ make the best pasta but dd makes the best `code` fr\nmaybe the word is flat",
+                ],
+            )
+       
 
 if __name__ == "__main__":
     unittest.main()
