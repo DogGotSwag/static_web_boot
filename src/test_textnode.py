@@ -58,9 +58,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         self.assertEqual(
             new_nodes,
             [
-                TextNode("", TextType.TEXT),
                 TextNode("code block", TextType.CODE),
-                TextNode("", TextType.TEXT),
             ]
         )
 
@@ -82,9 +80,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         self.assertEqual(
             new_nodes,
             [
-                TextNode("", TextType.TEXT),
                 TextNode("bold alone", TextType.BOLD),
-                TextNode("", TextType.TEXT),
             ]
         )
 
@@ -106,9 +102,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         self.assertEqual(
             new_nodes,
             [
-                TextNode("", TextType.TEXT),
                 TextNode("lonely text", TextType.ITALIC),
-                TextNode("", TextType.TEXT),
             ]
         )
         
