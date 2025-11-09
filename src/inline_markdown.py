@@ -8,14 +8,15 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             all_results.append(old_node)
         else:
             split_result = old_node.text.split(delimiter)
-            if len(split_result) == 1:
+            if len(split_result) % 2 == 0:
                 raise ValueError("invalid Markdown syntax")
-            result = [
-                TextNode(split_result[0], TextType.TEXT),
-                TextNode(split_result[1], text_type),
-                TextNode(split_result[2], TextType.TEXT),
-            ]
-            all_results.extend(result)
+            for i in range(len(split_result)):
+                if split_result[i] == "":
+                    continue
+                if i % 2 == 0:
+                    all_results.append(TextNode(split_result[i], TextType.TEXT))
+                else:
+                    all_results.append(TextNode(split_result[i], text_type))
     return all_results
 
 def extract_markdown_images(text):
@@ -54,3 +55,14 @@ def split_nodes_link(old_nodes):
             all_nodes.extend(split_nodes_link([TextNode(sections[1],TextType.TEXT)]))
     return all_nodes
 
+# def text_to_textnodes(text):
+#     nodes = split_nodes_link(split_nodes_image([TextNode(text, TextType.TEXT)]))
+#     res = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+#     res_two = split_nodes_delimiter(res, "`", TextType.CODE)
+#     res_three = split_nodes_delimiter(res_two, "_", TextType.ITALIC)
+#     return res_three
+
+# res = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
+
+# for node in res:
+#     print(node)
