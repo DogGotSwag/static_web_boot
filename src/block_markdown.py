@@ -25,6 +25,17 @@ def check_each_line(pattern, text):
             return False
     return True
 
+def ordered_lines_check(text):
+    index = 1
+    for line in text.split('\n'):
+        match_obj = re.match(r"^\d\.\s[\s\S]{1,}", line)
+        if match_obj is None:
+            return False
+        if int(line[0]) != index:
+            return False
+        index += 1
+    return True
+
 def block_to_block_type(block_text):
     heading_re = r"^\#{1,6}\s{1}[\w\S]{1,}"
     code_re = r"^\`{3}[\s\S]*\`{3}$"
@@ -38,10 +49,8 @@ def block_to_block_type(block_text):
         print("quote")
     elif check_each_line(unordered_re, block_text):
         print("unordered")
+    elif ordered_lines_check(block_text):
+        print("ordered")
     
-        
-
-    
-
-block_to_block_type("- hello dis a list\n-list part two")
+block_to_block_type("1. hello dis a list\n2. list part two")
     
