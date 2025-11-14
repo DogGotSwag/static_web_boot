@@ -1,7 +1,7 @@
 from enum import Enum
 import re
 
-class blockType(Enum):
+class BlockType(Enum):
     PARAGRAPH = "paragraph", 
     HEADING = "heading",
     CODE = "code",
@@ -42,16 +42,16 @@ def block_to_block_type(block_text):
     quote_re = r"^\>[\s\S]{1,}"
     unordered_re = r"^\-\s[\s\S]{1,}"
     if re.match(heading_re, block_text) is not None:
-        return blockType.HEADING
+        return BlockType.HEADING
     elif re.match(code_re, block_text) is not None:
-        return blockType.CODE
+        return BlockType.CODE
     elif check_each_line(quote_re, block_text):
-        return blockType.QUOTE
+        return BlockType.QUOTE
     elif check_each_line(unordered_re, block_text):
-        return blockType.UNORDERED
+        return BlockType.UNORDERED
     elif ordered_lines_check(block_text):
-        return blockType.ORDERED
-    return blockType.PARAGRAPH
+        return BlockType.ORDERED
+    return BlockType.PARAGRAPH
     
 block_to_block_type("1. hello dis a list\n2. list part two")
     
