@@ -1,7 +1,7 @@
 from enum import Enum
 import re
 from htmlnode import ParentNode, LeafNode
-from inline_markdown import text_to_textnodes
+from inline_markdown import text_to_textnodes, TextNode, TextType
 from text_node_to_html_node import text_node_to_html_node
 
 class BlockType(Enum):
@@ -89,7 +89,15 @@ def markdown_to_html_node(markdown):
             case BlockType.HEADING:
                 pass
             case BlockType.CODE:
-                pass
+                lines = block.split("\n")
+                text = ""
+                for line in lines:
+                    if line == "```":
+                        continue
+                    text += f"{line}{"\n"}"
+                textnode = TextNode(text, TextType.TEXT)
+                htmlnode = text_node_to_html_node(textnode)
+                html_children.append(ParentNode("pre", [ParentNode("code", [htmlnode])]))
             case BlockType.QUOTE:
                 html_children.append(children_from_lines(block, "blockquote"))
             case BlockType.UNORDERED:
@@ -97,11 +105,3 @@ def markdown_to_html_node(markdown):
             case BlockType.ORDERED:
                 html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
-
-md = """
-- list item one
-- list item two
-- here goes there `code` here
-
-"""
-print(markdown_to_html_node(md).to_html())
