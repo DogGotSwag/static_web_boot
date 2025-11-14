@@ -113,10 +113,3 @@ def markdown_to_html_node(markdown):
             case BlockType.ORDERED:
                 html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
-
-md = """
-### this **really** a header
-###### hello _world_
-"""
-
-print(markdown_to_html_node(md).to_html())

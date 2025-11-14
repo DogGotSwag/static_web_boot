@@ -76,3 +76,16 @@ the **same** even with inline stuff
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
+
+    def test_header(self):
+        md = """
+### this **really** a header
+###### hello _world_
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h3>this <b>really</b> a header</h3><h6>hello <i>world</i></h6></div>",
+        )
