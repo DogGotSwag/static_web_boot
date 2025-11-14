@@ -67,14 +67,12 @@ def children_from_lines(block, tag):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
-    tag = ""
     html_children = []
 
     for block in blocks:
         type_of_block = block_to_block_type(block)
         match type_of_block:
             case BlockType.PARAGRAPH:
-                tag = "div"
                 html_children.append(children_from_lines(block, "p"))
             case BlockType.HEADING:
                 pass
@@ -87,4 +85,15 @@ def markdown_to_html_node(markdown):
                 pass
             case BlockType.ORDERED:
                 pass
-    return ParentNode(tag, html_children)
+    return ParentNode("div", html_children)
+
+md = """
+> dis here a
+> text in a p
+> tag here
+
+> This is another paragraph with _italic_
+
+"""
+
+print(markdown_to_html_node(md).to_html())
