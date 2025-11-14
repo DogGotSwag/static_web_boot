@@ -52,6 +52,3 @@ def block_to_block_type(block_text):
     elif ordered_lines_check(block_text):
         return BlockType.ORDERED
     return BlockType.PARAGRAPH
-    
-block_to_block_type("1. hello dis a list\n2. list part two")
-    

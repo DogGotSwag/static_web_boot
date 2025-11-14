@@ -9,7 +9,7 @@ from inline_markdown import (
     text_to_textnodes
 )
 
-from block_markdown import markdown_to_blocks
+from block_markdown import markdown_to_blocks, block_to_block_type, BlockType
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -280,5 +280,58 @@ maybe the word is flat
             )
        
 
+class TestBlockToBlock(unittest.TestCase):
+    def test_block_to_block_header(self):
+        block = "# right here would be a heading #\n## with a smaller header lol ##"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING )
+
+    def test_block_to_block_header_two(self):
+        block = "####### title"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+        
+    def test_block_to_block_code(self):
+        block = "```print('hello world')```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE )
+
+    def test_block_to_block_code_two(self):
+        block = "```print('hello world')``"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+
+    def test_block_to_block_quote(self):
+        block = "> quote starts here\n>another here"
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE )
+
+    def test_block_to_block_quote_two(self):
+        block = "> quote starts here\nmissing here"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+
+    def test_block_to_block_unordered(self):
+        block = "- quote starts here"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED )
+
+    def test_block_to_block_unordered_two(self):
+        block = "-wrong format\n- good here"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+
+    def test_block_to_block_unordered_three(self):
+        block = "-  wrong format\n-  good here"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED )
+
+    def test_block_to_block_ordered(self):
+        block = "1. wrong format\n2. good here"
+        self.assertEqual(block_to_block_type(block), BlockType.ORDERED )
+
+    def test_block_to_block_ordered_two(self):
+        block = "1. wrong format\n2. good here\n4. skipped num"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+        
+    def test_block_to_block_ordered_three(self):
+        block = "1. wrong format\n2.good here\n3. skipped num"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+
+    def test_block_to_block_paragraph(self):
+        block = "jus some regular text"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH )
+        
 if __name__ == "__main__":
     unittest.main()
