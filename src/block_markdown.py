@@ -58,14 +58,12 @@ def block_to_block_type(block_text):
 
 def children_from_lines(block, tag):
     text = " ".join(block.split('\n'))
-    tn = text_to_textnodes(text)
-
-    dis_html_nodes = []
-    for t in tn:
-        dis_html_nodes.append(text_node_to_html_node(t))
-    parent_html_node = ParentNode(tag, dis_html_nodes)
+    text_nodes = text_to_textnodes(text)
+    html_nodes = []
+    for text_node in text_nodes:
+        html_nodes.append(text_node_to_html_node(text_node))
+    parent_html_node = ParentNode(tag, html_nodes)
     return parent_html_node
-
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
