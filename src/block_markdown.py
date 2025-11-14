@@ -38,19 +38,20 @@ def ordered_lines_check(text):
 
 def block_to_block_type(block_text):
     heading_re = r"^\#{1,6}\s{1}[\w\S]{1,}"
-    code_re = r"^\`{3}[\s\S]*\`{3}$"
-    quote_re = r"^\>[\s\S]*"
-    unordered_re = r"^\-\s[\s\S]*"
+    code_re = r"^\`{3}[\s\S]{1,}\`{3}$"
+    quote_re = r"^\>[\s\S]{1,}"
+    unordered_re = r"^\-\s[\s\S]{1,}"
     if re.match(heading_re, block_text) is not None:
-        print("heading")
+        return blockType.HEADING
     elif re.match(code_re, block_text) is not None:
-        print("code")
+        return blockType.CODE
     elif check_each_line(quote_re, block_text):
-        print("quote")
+        return blockType.QUOTE
     elif check_each_line(unordered_re, block_text):
-        print("unordered")
+        return blockType.UNORDERED
     elif ordered_lines_check(block_text):
-        print("ordered")
+        return blockType.ORDERED
+    return blockType.PARAGRAPH
     
 block_to_block_type("1. hello dis a list\n2. list part two")
     
