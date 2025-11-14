@@ -60,3 +60,19 @@ This is another paragraph with _italic_ text and `code` here
             html,
             "<div><ol><li>1. list item one</li><li>2. list item two</li><li>3. here goes there <code>code</code> here</li></ol></div>",
         )
+
+
+    def test_codeblock(self):
+        md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+        )
