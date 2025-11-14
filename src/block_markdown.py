@@ -65,6 +65,18 @@ def children_from_lines(block, tag):
     parent_html_node = ParentNode(tag, html_nodes)
     return parent_html_node
 
+def make_list(block, tag):
+    all_list_items = []
+    for line in block.split('\n'):
+        text_nodes = text_to_textnodes(line)
+        html_nodes = []
+        for text_node in text_nodes:
+            html_node = text_node_to_html_node(text_node)
+            html_nodes.append(html_node)
+        list_item = ParentNode("li", html_nodes)
+        all_list_items.append(list_item)
+    return ParentNode(tag, all_list_items)
+
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     html_children = []
@@ -79,21 +91,17 @@ def markdown_to_html_node(markdown):
             case BlockType.CODE:
                 pass
             case BlockType.QUOTE:
-                tag = "blockquote"
                 html_children.append(children_from_lines(block, "blockquote"))
             case BlockType.UNORDERED:
-                pass
+                html_children.append(make_list(block, "ul"))
             case BlockType.ORDERED:
-                pass
+                html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
 
 md = """
-> dis here a
-> text in a p
-> tag here
-
-> This is another paragraph with _italic_
+- list item one
+- list item two
+- here goes there `code` here
 
 """
-
 print(markdown_to_html_node(md).to_html())
