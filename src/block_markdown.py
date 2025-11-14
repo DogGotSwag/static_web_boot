@@ -1,5 +1,8 @@
 from enum import Enum
 import re
+from htmlnode import ParentNode, LeafNode
+from inline_markdown import text_to_textnodes
+from text_node_to_html_node import text_node_to_html_node
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph", 
@@ -52,3 +55,50 @@ def block_to_block_type(block_text):
     elif ordered_lines_check(block_text):
         return BlockType.ORDERED
     return BlockType.PARAGRAPH
+
+def children_from_lines(block, tag):
+    html_children = []
+    for line in block.split('\n'):
+        textnodes = text_to_textnodes(line)
+        html_nodes = []
+        for textnode in textnodes:
+            html_node = text_node_to_html_node(textnode)
+            html_nodes.append(html_node)
+        line_html_node = ParentNode(tag, html_nodes)
+        html_children.append(line_html_node)
+    return html_children
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    tag = ""
+    for block in blocks:
+        type_of_block = block_to_block_type(block)
+        html_children = []
+        match type_of_block:
+            case BlockType.PARAGRAPH:
+                tag = "div"
+                html_children = children_from_lines(block, "p")
+                
+            case BlockType.HEADING:
+                pass
+            case BlockType.CODE:
+                pass
+            case BlockType.QUOTE:
+                tag = "blockquote"
+                html_children = children_from_lines(block, "blockquote")
+            case BlockType.UNORDERED:
+                pass
+            case BlockType.ORDERED:
+                pass
+    return ParentNode(tag, html_children)
+
+md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+
+print(markdown_to_html_node(md).to_html())
