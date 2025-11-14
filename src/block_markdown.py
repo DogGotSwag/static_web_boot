@@ -57,48 +57,36 @@ def block_to_block_type(block_text):
     return BlockType.PARAGRAPH
 
 def children_from_lines(block, tag):
-    html_children = []
-    for line in block.split('\n'):
-        textnodes = text_to_textnodes(line)
-        html_nodes = []
-        for textnode in textnodes:
-            html_node = text_node_to_html_node(textnode)
-            html_nodes.append(html_node)
-        line_html_node = ParentNode(tag, html_nodes)
-        html_children.append(line_html_node)
-    return html_children
+    text = " ".join(block.split('\n'))
+    tn = text_to_textnodes(text)
+
+    dis_html_nodes = []
+    for t in tn:
+        dis_html_nodes.append(text_node_to_html_node(t))
+    parent_html_node = ParentNode(tag, dis_html_nodes)
+    return parent_html_node
+
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     tag = ""
+    html_children = []
+
     for block in blocks:
         type_of_block = block_to_block_type(block)
-        html_children = []
         match type_of_block:
             case BlockType.PARAGRAPH:
                 tag = "div"
-                html_children = children_from_lines(block, "p")
-                
+                html_children.append(children_from_lines(block, "p"))
             case BlockType.HEADING:
                 pass
             case BlockType.CODE:
                 pass
             case BlockType.QUOTE:
                 tag = "blockquote"
-                html_children = children_from_lines(block, "blockquote")
+                html_children.append(children_from_lines(block, "blockquote"))
             case BlockType.UNORDERED:
                 pass
             case BlockType.ORDERED:
                 pass
     return ParentNode(tag, html_children)
-
-md = """
-This is **bolded** paragraph
-text in a p
-tag here
-
-This is another paragraph with _italic_ text and `code` here
-
-"""
-
-print(markdown_to_html_node(md).to_html())
