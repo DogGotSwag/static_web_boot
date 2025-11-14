@@ -87,7 +87,15 @@ def markdown_to_html_node(markdown):
             case BlockType.PARAGRAPH:
                 html_children.append(children_from_lines(block, "p"))
             case BlockType.HEADING:
-                pass
+                for line in block.split('\n'):
+                    text = line.split(" ", 1)
+                    textnodes = text_to_textnodes(text[1])
+                    html_child = []
+                    for tn in textnodes:
+                        html_node = text_node_to_html_node(tn)
+                        html_child.append(html_node)
+                    this_header = ParentNode(f"h{len(text[0])}", html_child)
+                    html_children.append(this_header)
             case BlockType.CODE:
                 lines = block.split("\n")
                 text = ""
@@ -105,3 +113,10 @@ def markdown_to_html_node(markdown):
             case BlockType.ORDERED:
                 html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
+
+md = """
+### this **really** a header
+###### hello _world_
+"""
+
+print(markdown_to_html_node(md).to_html())
