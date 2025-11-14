@@ -29,16 +29,19 @@ def block_to_block_type(block_text):
     heading_re = r"^\#{1,6}\s{1}[\w\S]{1,}"
     code_re = r"^\`{3}[\s\S]*\`{3}$"
     quote_re = r"^\>[\s\S]*"
+    unordered_re = r"^\-\s[\s\S]*"
     if re.match(heading_re, block_text) is not None:
         print("heading")
     elif re.match(code_re, block_text) is not None:
         print("code")
     elif check_each_line(quote_re, block_text):
         print("quote")
+    elif check_each_line(unordered_re, block_text):
+        print("unordered")
     
         
 
     
 
-block_to_block_type("> hello dis a list\n list part two")
+block_to_block_type("- hello dis a list\n-list part two")
     
