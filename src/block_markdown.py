@@ -1,4 +1,5 @@
 from enum import Enum
+import re
 
 class blockType(Enum):
     PARAGRAPH = "paragraph", 
@@ -17,4 +18,18 @@ def markdown_to_blocks(markdown):
         final_list.append(block.strip())     
     return final_list
 
+def block_to_block_type(block_text):
+    heading_re = r"^\#{1,6}\s{1}[\w\S]{1,}"
+    code_re = r"^\`{3}[\s\S]*\`{3}$"
+    quote_re = r"^\>[\s\S]*"
+    if re.match(heading_re, block_text) is not None:
+        print("heading")
+    elif re.match(code_re, block_text) is not None:
+        print("code")
+    
+        
 
+    
+
+# block_to_block_type("> hello dis a list\n list part two")
+    
