@@ -47,19 +47,19 @@ This is another paragraph with _italic_ text and `code` here
             "<div><ul><li>list item one</li><li>list item two</li><li>here goes there <code>code</code> here</li></ul></div>",
         )
 
-#     def test_ordered(self):
-#         md = """
-# 1. list item one
-# 2. list item two
-# 3. here goes there `code` here
+    def test_ordered(self):
+        md = """
+1. list item one
+2. list item two
+3. here goes there `code` here
 
-# """
-#         node = markdown_to_html_node(md)
-#         html = node.to_html()
-#         self.assertEqual(
-#             html,
-#             "<div><ol><li>1. list item one</li><li>2. list item two</li><li>3. here goes there <code>code</code> here</li></ol></div>",
-#         )
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ol><li>list item one</li><li>list item two</li><li>here goes there <code>code</code> here</li></ol></div>",
+        )
 
 
     def test_codeblock(self):
