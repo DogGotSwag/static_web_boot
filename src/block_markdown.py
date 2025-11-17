@@ -57,7 +57,11 @@ def block_to_block_type(block_text):
     return BlockType.PARAGRAPH
 
 def children_from_lines(block, tag):
-    text = " ".join(block.split('\n'))
+    text = ""
+    if tag == "blockquote":
+        text =  " ".join(list(map( lambda x: x.split(" ", 1)[1],block.split('\n'))))
+    else:
+        text = " ".join(block.split('\n'))
     text_nodes = text_to_textnodes(text)
     html_nodes = []
     for text_node in text_nodes:
@@ -68,7 +72,8 @@ def children_from_lines(block, tag):
 def make_list(block, tag):
     all_list_items = []
     for line in block.split('\n'):
-        text_nodes = text_to_textnodes(line)
+        text_only = line.split(" ", 1)
+        text_nodes = text_to_textnodes(text_only[1])
         html_nodes = []
         for text_node in text_nodes:
             html_node = text_node_to_html_node(text_node)
@@ -113,3 +118,14 @@ def markdown_to_html_node(markdown):
             case BlockType.ORDERED:
                 html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
+
+
+md = """
+> This is a
+> blockquote block
+
+this is paragraph text
+
+"""
+
+print(markdown_to_html_node(md).to_html())
