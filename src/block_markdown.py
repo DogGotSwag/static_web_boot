@@ -56,28 +56,29 @@ def block_to_block_type(block_text):
         return BlockType.ORDERED
     return BlockType.PARAGRAPH
 
+def text_to_children(text):
+    text_nodes = text_to_textnodes(text)
+    html_nodes = []
+    for text_node in text_nodes:
+        html_nodes.append(text_node_to_html_node(text_node))
+    return html_nodes
+
 def children_from_lines(block, tag):
     text = ""
     if tag == "blockquote":
         text =  " ".join(list(map( lambda x: x.split(" ", 1)[1],block.split('\n'))))
     else:
         text = " ".join(block.split('\n'))
-    text_nodes = text_to_textnodes(text)
-    html_nodes = []
-    for text_node in text_nodes:
-        html_nodes.append(text_node_to_html_node(text_node))
+    html_nodes = text_to_children(text)
     parent_html_node = ParentNode(tag, html_nodes)
     return parent_html_node
+
 
 def make_list(block, tag):
     all_list_items = []
     for line in block.split('\n'):
         text_only = line.split(" ", 1)
-        text_nodes = text_to_textnodes(text_only[1])
-        html_nodes = []
-        for text_node in text_nodes:
-            html_node = text_node_to_html_node(text_node)
-            html_nodes.append(html_node)
+        html_nodes = text_to_children(text_only[1])
         list_item = ParentNode("li", html_nodes)
         all_list_items.append(list_item)
     return ParentNode(tag, all_list_items)
@@ -94,11 +95,7 @@ def markdown_to_html_node(markdown):
             case BlockType.HEADING:
                 for line in block.split('\n'):
                     text = line.split(" ", 1)
-                    textnodes = text_to_textnodes(text[1])
-                    html_child = []
-                    for tn in textnodes:
-                        html_node = text_node_to_html_node(tn)
-                        html_child.append(html_node)
+                    html_child = text_to_children(text[1])
                     this_header = ParentNode(f"h{len(text[0])}", html_child)
                     html_children.append(this_header)
             case BlockType.CODE:
@@ -119,13 +116,3 @@ def markdown_to_html_node(markdown):
                 html_children.append(make_list(block, "ol"))
     return ParentNode("div", html_children)
 
-
-md = """
-> This is a
-> blockquote block
-
-this is paragraph text
-
-"""
-
-print(markdown_to_html_node(md).to_html())
